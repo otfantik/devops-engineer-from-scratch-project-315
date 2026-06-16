@@ -39,7 +39,6 @@ out/
 
 ### Ansible ###
 inventory.yml
-playbook.yml
 ansible/vault.yml
 ansible/*.retry
 ansible/group_vars/
