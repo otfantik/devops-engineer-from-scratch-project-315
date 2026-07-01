@@ -2,8 +2,6 @@
 - name: Configure bulletin server
   hosts: hexlet-devops-project3
   become: yes
-  vars_files:
-    - ansible/vault.yml
 
   tasks:
     - name: Update apt cache
@@ -22,17 +20,13 @@
           - lsb-release
           - ufw
           - python3-pip
-          - virtualenv
         state: present
 
-    - name: Install Docker with community.docker collection
-      community.docker.docker:
-        name: docker
-        state: present
-
-    - name: Install Docker Compose
-      community.docker.docker_compose:
-        name: docker-compose
+    - name: Install Docker
+      apt:
+        name:
+          - docker.io
+          - docker-compose
         state: present
 
     - name: Add user to docker group
@@ -56,20 +50,3 @@
       ufw:
         state: enabled
         policy: deny
-
-    - name: Install Nginx using nginxinc collection
-      nginxinc.nginx_core.nginx:
-        state: present
-
-    - name: Start and enable Nginx
-      systemd:
-        name: nginx
-        state: started
-        enabled: yes
-
-    - name: Install Certbot using community.crypto
-      community.crypto.certbot:
-        state: present
-        email: "{{ certbot_email }}"
-        domains: "{{ domain_name }}"
-        agree_tos: yes
